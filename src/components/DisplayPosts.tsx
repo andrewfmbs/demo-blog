@@ -3,21 +3,23 @@ import { API, graphqlOperation } from "aws-amplify";
 import { useEffect, useRef, useState } from "react";
 import { createPost } from "../graphql/mutations";
 import { onCreatePost } from "../graphql/subscriptions";
+import Observable from "zen-observable-ts";
 
 const DisplayPosts = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
     getPosts();
   }, []);
 
   useEffect(() => {
-    const createPostListener = API.graphql(
+    const createPostListener = (API.graphql(
       graphqlOperation(onCreatePost)
-    ).subscribe({
+    ) as Observable<any>)
+    .subscribe({
       next: (postData) => {
         const newPost = postData.value.data.onCreatePost;
-        const prevPosts = posts.filter((post) => post.id !== newPost.id);
+        const prevPosts = posts.filter((post: any) => post.id !== newPost.id);
         const updatedPosts = [newPost, ...prevPosts];
         setPosts(updatedPosts);
       },
@@ -27,7 +29,7 @@ const DisplayPosts = () => {
   }, [posts]);
 
   const getPosts = async () => {
-    const result = await API.graphql(graphqlOperation(listPosts));
+    const result: any = await API.graphql(graphqlOperation(listPosts));
     setPosts(result.data.listPosts.items);
     console.log(result.data);
   };
@@ -46,7 +48,7 @@ const DisplayPosts = () => {
     <div>
       <button onClick={addPost}>Click me</button>
 
-      {posts.map((post, i) => (
+      {posts.map((post , i) => (
         <div key={i}>{post.postBody}</div>
       ))}
     </div>
