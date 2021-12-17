@@ -1,6 +1,6 @@
 import { listPosts } from "../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPost } from "../graphql/mutations";
 import { onCreatePost } from "../graphql/subscriptions";
 import Observable from "zen-observable-ts";
@@ -10,23 +10,20 @@ const DisplayPosts = () => {
 
   useEffect(() => {
     getPosts();
-  }, []);
-
-  useEffect(() => {
-    const createPostListener = (API.graphql(
-      graphqlOperation(onCreatePost)
-    ) as Observable<any>)
-    .subscribe({
+    const createPostListener = (
+      API.graphql(graphqlOperation(onCreatePost)) as Observable<any>
+    ).subscribe({
       next: (postData) => {
         const newPost = postData.value.data.onCreatePost;
-        const prevPosts = posts.filter((post: any) => post.id !== newPost.id);
-        const updatedPosts = [newPost, ...prevPosts];
-        setPosts(updatedPosts);
+        setPosts((prevState) => {
+          const prevPosts = prevState.filter((post: any) => post.id !== newPost.id);
+          const updatedPosts = [newPost, ...prevPosts];
+          return updatedPosts
+        });
       },
     });
-    
     return () => createPostListener.unsubscribe();
-  }, [posts]);
+  }, []);
 
   const getPosts = async () => {
     const result: any = await API.graphql(graphqlOperation(listPosts));
