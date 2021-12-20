@@ -1,29 +1,39 @@
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } }
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+}
 
 type Post @model {
-	id: ID!
-	postOwnerId: String!
-	postOwnerUsername: String!
-	postTitle: String!
-	postBody: String!
-	createdAt: String
-	comments: [Comment] @hasMany
-	likes: [Like] @hasMany
+  id: ID!
+  postOwnerId: String!
+  postOwnerUsername: String!
+  postTitle: String!
+  postBody: String!
+  createdAt: String
+  comments: [Comment] @hasMany
+  likes: [Like] @hasMany
 }
- 
+
 type Comment @model {
-	id: ID!
-	commentOwnerId: String!
-	commentOwnerUsername: String!
-	post: Post @belongsTo
-	content: String!
-	createdAt: String!
+  id: ID!
+  commentOwnerId: String!
+  commentOwnerUsername: String!
+  post: Post @belongsTo
+  content: String!
+  createdAt: String!
 }
- 
+
 type Like @model {
-	id: ID!
-	numberLikes: Int!
-	likeOwnerId: String!
-	likeOwnerUsername: String!
-	post: Post @belongsTo
+  id: ID!
+  numberLikes: Int!
+  likeOwnerId: String!
+  likeOwnerUsername: String!
+  post: Post @belongsTo
+}
+
+type User @model {
+  id: ID!
+  age: Int!
+  location: String!
+  post: [Post] @hasMany
+  name: String!
 }

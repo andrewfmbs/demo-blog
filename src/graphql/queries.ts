@@ -36,6 +36,7 @@ export const getPost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -60,6 +61,7 @@ export const listPosts = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       nextToken
     }
@@ -85,6 +87,7 @@ export const getComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -112,6 +115,7 @@ export const listComments = /* GraphQL */ `
           postBody
           createdAt
           updatedAt
+          userPostId
         }
         content
         createdAt
@@ -143,6 +147,7 @@ export const getLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
@@ -170,10 +175,58 @@ export const listLikes = /* GraphQL */ `
           postBody
           createdAt
           updatedAt
+          userPostId
         }
         createdAt
         updatedAt
         postLikesId
+      }
+      nextToken
+    }
+  }
+`;
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
       }
       nextToken
     }

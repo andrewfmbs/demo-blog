@@ -36,6 +36,7 @@ export const onCreatePost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -73,6 +74,7 @@ export const onUpdatePost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -110,6 +112,7 @@ export const onDeletePost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -133,6 +136,7 @@ export const onCreateComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -161,6 +165,7 @@ export const onUpdateComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -189,6 +194,7 @@ export const onDeleteComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -218,6 +224,7 @@ export const onCreateLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
@@ -246,6 +253,7 @@ export const onUpdateLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
@@ -274,10 +282,86 @@ export const onDeleteLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
       postLikesId
+    }
+  }
+`;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
     }
   }
 `;

@@ -39,6 +39,7 @@ export const createPost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -79,6 +80,7 @@ export const updatePost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -119,6 +121,7 @@ export const deletePost = /* GraphQL */ `
         nextToken
       }
       updatedAt
+      userPostId
     }
   }
 `;
@@ -145,6 +148,7 @@ export const createComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -176,6 +180,7 @@ export const updateComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -207,6 +212,7 @@ export const deleteComment = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       content
       createdAt
@@ -239,6 +245,7 @@ export const createLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
@@ -270,6 +277,7 @@ export const updateLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
@@ -301,10 +309,95 @@ export const deleteLike = /* GraphQL */ `
           nextToken
         }
         updatedAt
+        userPostId
       }
       createdAt
       updatedAt
       postLikesId
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      age
+      location
+      post {
+        items {
+          id
+          postOwnerId
+          postOwnerUsername
+          postTitle
+          postBody
+          createdAt
+          updatedAt
+          userPostId
+        }
+        nextToken
+      }
+      name
+      createdAt
+      updatedAt
     }
   }
 `;
