@@ -2,12 +2,79 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const searchPosts = /* GraphQL */ `
+  query SearchPosts(
+    $filter: SearchablePostFilterInput
+    $sort: [SearchablePostSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchablePostAggregationInput]
+  ) {
+    searchPosts(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
+        postTitle
+        postBody
+        createdAt
+        comments {
+          nextToken
+        }
+        likes {
+          nextToken
+        }
+        updatedAt
+        userPostId
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
-      postOwnerId
-      postOwnerUsername
+      postOwner {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
+      }
       postTitle
       postBody
       createdAt
@@ -49,8 +116,14 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -75,8 +148,14 @@ export const getComment = /* GraphQL */ `
       commentOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -109,8 +188,6 @@ export const listComments = /* GraphQL */ `
         commentOwnerUsername
         post {
           id
-          postOwnerId
-          postOwnerUsername
           postTitle
           postBody
           createdAt
@@ -135,8 +212,14 @@ export const getLike = /* GraphQL */ `
       likeOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -169,8 +252,6 @@ export const listLikes = /* GraphQL */ `
         likeOwnerUsername
         post {
           id
-          postOwnerId
-          postOwnerUsername
           postTitle
           postBody
           createdAt
@@ -194,8 +275,6 @@ export const getUser = /* GraphQL */ `
       post {
         items {
           id
-          postOwnerId
-          postOwnerUsername
           postTitle
           postBody
           createdAt

@@ -2,10 +2,9 @@ input AMPLIFY {
   globalAuthRule: AuthRule = { allow: public }
 }
 
-type Post @model {
+type Post @model @searchable {
   id: ID!
-  postOwnerId: String!
-  postOwnerUsername: String!
+  postOwner: User @belongsTo
   postTitle: String!
   postBody: String!
   createdAt: String
@@ -36,4 +35,13 @@ type User @model {
   location: String!
   post: [Post] @hasMany
   name: String!
+}
+
+type Subscription {
+  subscribeToEventComments(postCommentsId: String!): Comment
+    @aws_subscribe(mutations: ["createComment"])
+  subscribeToEventNewPost(userPostId: String!): Post
+    @aws_subscribe(mutations: ["createPost"])
+  subscribeToEventDeletePost(userPostId: String!): Post
+    @aws_subscribe(mutations: ["deletePost"])
 }

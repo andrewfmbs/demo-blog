@@ -11,12 +11,12 @@ const PostForm = () => {
 
   const addPost = async () => {
     const input = {
-      postOwnerId: "2",
-      postOwnerUsername: "andrew",
+      userPostId: "c4fd77aa-eb26-4632-95ec-67ef8c153e0c",
       postTitle: title,
       postBody: body,
       createdAt: new Date().toISOString(),
     };
+    console.log(input);
     await API.graphql(graphqlOperation(createPost, { input }));
   };
 

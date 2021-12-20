@@ -2,12 +2,150 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const subscribeToEventComments = /* GraphQL */ `
+  subscription SubscribeToEventComments($postCommentsId: String!) {
+    subscribeToEventComments(postCommentsId: $postCommentsId) {
+      id
+      commentOwnerId
+      commentOwnerUsername
+      post {
+        id
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
+        postTitle
+        postBody
+        createdAt
+        comments {
+          nextToken
+        }
+        likes {
+          nextToken
+        }
+        updatedAt
+        userPostId
+      }
+      content
+      createdAt
+      updatedAt
+      postCommentsId
+    }
+  }
+`;
+export const subscribeToEventNewPost = /* GraphQL */ `
+  subscription SubscribeToEventNewPost($userPostId: String!) {
+    subscribeToEventNewPost(userPostId: $userPostId) {
+      id
+      postOwner {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
+      }
+      postTitle
+      postBody
+      createdAt
+      comments {
+        items {
+          id
+          commentOwnerId
+          commentOwnerUsername
+          content
+          createdAt
+          updatedAt
+          postCommentsId
+        }
+        nextToken
+      }
+      likes {
+        items {
+          id
+          numberLikes
+          likeOwnerId
+          likeOwnerUsername
+          createdAt
+          updatedAt
+          postLikesId
+        }
+        nextToken
+      }
+      updatedAt
+      userPostId
+    }
+  }
+`;
+export const subscribeToEventDeletePost = /* GraphQL */ `
+  subscription SubscribeToEventDeletePost($userPostId: String!) {
+    subscribeToEventDeletePost(userPostId: $userPostId) {
+      id
+      postOwner {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
+      }
+      postTitle
+      postBody
+      createdAt
+      comments {
+        items {
+          id
+          commentOwnerId
+          commentOwnerUsername
+          content
+          createdAt
+          updatedAt
+          postCommentsId
+        }
+        nextToken
+      }
+      likes {
+        items {
+          id
+          numberLikes
+          likeOwnerId
+          likeOwnerUsername
+          createdAt
+          updatedAt
+          postLikesId
+        }
+        nextToken
+      }
+      updatedAt
+      userPostId
+    }
+  }
+`;
 export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost {
     onCreatePost {
       id
-      postOwnerId
-      postOwnerUsername
+      postOwner {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
+      }
       postTitle
       postBody
       createdAt
@@ -44,8 +182,17 @@ export const onUpdatePost = /* GraphQL */ `
   subscription OnUpdatePost {
     onUpdatePost {
       id
-      postOwnerId
-      postOwnerUsername
+      postOwner {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
+      }
       postTitle
       postBody
       createdAt
@@ -82,8 +229,17 @@ export const onDeletePost = /* GraphQL */ `
   subscription OnDeletePost {
     onDeletePost {
       id
-      postOwnerId
-      postOwnerUsername
+      postOwner {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        createdAt
+        updatedAt
+      }
       postTitle
       postBody
       createdAt
@@ -124,8 +280,14 @@ export const onCreateComment = /* GraphQL */ `
       commentOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -153,8 +315,14 @@ export const onUpdateComment = /* GraphQL */ `
       commentOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -182,8 +350,14 @@ export const onDeleteComment = /* GraphQL */ `
       commentOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -212,8 +386,14 @@ export const onCreateLike = /* GraphQL */ `
       likeOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -241,8 +421,14 @@ export const onUpdateLike = /* GraphQL */ `
       likeOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -270,8 +456,14 @@ export const onDeleteLike = /* GraphQL */ `
       likeOwnerUsername
       post {
         id
-        postOwnerId
-        postOwnerUsername
+        postOwner {
+          id
+          age
+          location
+          name
+          createdAt
+          updatedAt
+        }
         postTitle
         postBody
         createdAt
@@ -299,8 +491,6 @@ export const onCreateUser = /* GraphQL */ `
       post {
         items {
           id
-          postOwnerId
-          postOwnerUsername
           postTitle
           postBody
           createdAt
@@ -324,8 +514,6 @@ export const onUpdateUser = /* GraphQL */ `
       post {
         items {
           id
-          postOwnerId
-          postOwnerUsername
           postTitle
           postBody
           createdAt
@@ -349,8 +537,6 @@ export const onDeleteUser = /* GraphQL */ `
       post {
         items {
           id
-          postOwnerId
-          postOwnerUsername
           postTitle
           postBody
           createdAt

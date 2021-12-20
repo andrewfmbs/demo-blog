@@ -11,7 +11,10 @@ import {
   Dropdown,
   Space,
 } from "antd";
-import { onCreateComment } from "../../graphql/subscriptions";
+import {
+  onCreateComment,
+  subscribeToEventComments,
+} from "../../graphql/subscriptions";
 import { listComments } from "../../graphql/queries";
 import Observable from "zen-observable-ts";
 import { createComment } from "../../graphql/mutations";
@@ -26,10 +29,15 @@ const CommentSection: FC<Props> = ({ postId }) => {
   useEffect(() => {
     getComments();
     const createCommentsListener = (
-      API.graphql(graphqlOperation(onCreateComment)) as Observable<any>
+      API.graphql(
+        graphqlOperation(subscribeToEventComments, {
+          postCommentsId: postId,
+        })
+      ) as Observable<any>
     ).subscribe({
       next: (commentData) => {
-        const newComment = commentData.value.data.onCreateComment;
+        console.log(commentData);
+        const newComment = commentData.value.data.subscribeToEventComments;
         setComments((prevState) => {
           const prevComments = prevState.filter(
             (comment: any) => comment.id !== newComment.id
@@ -58,12 +66,12 @@ const CommentSection: FC<Props> = ({ postId }) => {
       setComments(
         _.orderBy(result.data.listComments.items, ["createdAt"], "desc")
       );
-      console.log(result.data.listComments.items);
+      // console.log(result.data.listComments.items);
     }
   };
 
   return (
-    <Collapse>
+    <Collapse accordion>
       <Collapse.Panel header="Comments" key="1">
         <Space direction="vertical" style={{ width: "100%" }}>
           <CommentForm postId={postId} />
@@ -132,7 +140,7 @@ const Comments: FC<CommentsProps> = ({ comments = [] }) => {
 const SortButton = () => {
   const menu = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item key="1">
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -141,7 +149,7 @@ const SortButton = () => {
           1st menu item
         </a>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key="2">
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -150,7 +158,7 @@ const SortButton = () => {
           2nd menu item
         </a>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key="3">
         <a
           target="_blank"
           rel="noopener noreferrer"
