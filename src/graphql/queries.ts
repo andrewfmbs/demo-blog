@@ -2,6 +2,22 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const testHttpCall = /* GraphQL */ `
+  query TestHttpCall {
+    testHttpCall {
+      data {
+        bondName
+        previousClose
+        currentPrice
+        nineThirtyPrice
+        tenPrice
+        tenThirtyPrice
+        elevenPrice
+        elevenThirtyPrice
+      }
+    }
+  }
+`;
 export const searchPosts = /* GraphQL */ `
   query SearchPosts(
     $filter: SearchablePostFilterInput
@@ -26,6 +42,7 @@ export const searchPosts = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -60,6 +77,54 @@ export const searchPosts = /* GraphQL */ `
     }
   }
 `;
+export const searchUsers = /* GraphQL */ `
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
+  ) {
+    searchUsers(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        age
+        location
+        post {
+          nextToken
+        }
+        name
+        cognitoID
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
@@ -72,6 +137,7 @@ export const getPost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -121,6 +187,7 @@ export const listPosts = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -153,6 +220,7 @@ export const getComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -217,6 +285,7 @@ export const getLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -284,6 +353,7 @@ export const getUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }
@@ -304,6 +374,7 @@ export const listUsers = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }

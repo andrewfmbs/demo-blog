@@ -4,7 +4,7 @@ input AMPLIFY {
 
 type Post @model @searchable {
   id: ID!
-  postOwner: User @belongsTo
+  postOwner: User! @belongsTo
   postTitle: String!
   postBody: String!
   createdAt: String
@@ -29,12 +29,32 @@ type Like @model {
   post: Post @belongsTo
 }
 
-type User @model {
+type User @model @searchable {
   id: ID!
   age: Int!
   location: String!
   post: [Post] @hasMany
   name: String!
+  cognitoID: String!
+}
+
+type BondCard {
+  data: BondCardData
+}
+
+type BondCardData {
+  bondName: String!
+  previousClose: String!
+  currentPrice: String!
+  nineThirtyPrice: String
+  tenPrice: String
+  tenThirtyPrice: String
+  elevenPrice: String
+  elevenThirtyPrice: String
+}
+
+type Query {
+  testHttpCall: BondCard
 }
 
 type Subscription {

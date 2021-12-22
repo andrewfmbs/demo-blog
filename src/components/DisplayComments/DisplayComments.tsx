@@ -72,7 +72,7 @@ const CommentSection: FC<Props> = ({ postId }) => {
 
   return (
     <Collapse accordion>
-      <Collapse.Panel header="Comments" key="1">
+      <Collapse.Panel header="Comments" key="1" data-testid="comments-panel">
         <Space direction="vertical" style={{ width: "100%" }}>
           <CommentForm postId={postId} />
           <SortButton />

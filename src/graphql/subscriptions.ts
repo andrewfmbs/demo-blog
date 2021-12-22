@@ -15,6 +15,7 @@ export const subscribeToEventComments = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -49,6 +50,7 @@ export const subscribeToEventNewPost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -96,6 +98,7 @@ export const subscribeToEventDeletePost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -143,6 +146,7 @@ export const onCreatePost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -190,6 +194,7 @@ export const onUpdatePost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -237,6 +242,7 @@ export const onDeletePost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -285,6 +291,7 @@ export const onCreateComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -320,6 +327,7 @@ export const onUpdateComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -355,6 +363,7 @@ export const onDeleteComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -391,6 +400,7 @@ export const onCreateLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -426,6 +436,7 @@ export const onUpdateLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -461,6 +472,7 @@ export const onDeleteLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -500,6 +512,7 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }
@@ -523,6 +536,7 @@ export const onUpdateUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }
@@ -546,6 +560,7 @@ export const onDeleteUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }

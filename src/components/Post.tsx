@@ -1,24 +1,26 @@
 import { API, graphqlOperation } from "aws-amplify";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Avatar, Button, Card, Typography, Space, Row, Col } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { createLike, deleteLike, deletePost } from "../graphql/mutations";
 import DisplayComments from "./DisplayComments/DisplayComments";
-import _ from "lodash";
+import { Post as PostType, User as UserType } from "../API";
+import { UserContext } from "../App";
+import { Link } from "react-router-dom";
 
 const { Title } = Typography;
 
-const userID = "c4fd77aa-eb26-4632-95ec-67ef8c153e0c";
-const Post = ({ post }: { post: any }) => {
+const Post = ({ post }: { post: PostType }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const userData: UserType = useContext(UserContext);
 
   const toggleLiked = async () => {
     if (isLiked) {
       await API.graphql(
         graphqlOperation(createLike, {
           input: {
-            likeOwnerId: userID,
-            likeOwnerUsername: "andrew",
+            likeOwnerId: post.userPostId,
+            likeOwnerUsername: userData.name,
             postLikesId: post.id,
           },
         })
@@ -50,8 +52,14 @@ const Post = ({ post }: { post: any }) => {
         title={
           <Row justify="space-between">
             <Col>
-              <Title level={3}>{post.postTitle || <>&nbsp;</>}</Title>
-              <Title level={4}>{post.postOwnerUsername || <>&nbsp;</>}</Title>
+              <Title level={3} data-testid="post-title">
+                {post.postTitle || <>&nbsp;</>}
+              </Title>
+              <Title level={4} data-testid="post-owner-name">
+                <Link to={`/profile/${post.postOwner?.name}`}>
+                  {post.postOwner?.name || <>&nbsp;</>}
+                </Link>
+              </Title>
             </Col>
             <Col>
               <Row>
@@ -63,15 +71,22 @@ const Post = ({ post }: { post: any }) => {
               </Row>
               <Row>
                 <Col>
-                  {post.userPostId === userID ? (
+                  {post.userPostId === userData.id ? (
                     <Space direction="vertical" style={{ paddingTop: "5px" }}>
-                      <Button onClick={callDeletePost} danger>
+                      <Button
+                        onClick={callDeletePost}
+                        danger
+                        data-testid="post-delete-button"
+                      >
                         Delete
                       </Button>
                     </Space>
                   ) : (
                     <Space direction="vertical" style={{ paddingTop: "5px" }}>
-                      <Button onClick={toggleLiked}>
+                      <Button
+                        onClick={toggleLiked}
+                        data-testid="post-like-button"
+                      >
                         {isLiked ? "Unlike" : "Like"}
                       </Button>
                     </Space>
@@ -82,7 +97,7 @@ const Post = ({ post }: { post: any }) => {
           </Row>
         }
       >
-        <p>{post.postBody || <>&nbsp;</>}</p>
+        <p data-testid="post-body">{post.postBody || <>&nbsp;</>}</p>
       </Card>
       <DisplayComments postId={post.id} />
     </div>

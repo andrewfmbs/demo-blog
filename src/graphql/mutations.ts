@@ -17,6 +17,7 @@ export const createPost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -67,6 +68,7 @@ export const updatePost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -117,6 +119,7 @@ export const deletePost = /* GraphQL */ `
           nextToken
         }
         name
+        cognitoID
         createdAt
         updatedAt
       }
@@ -168,6 +171,7 @@ export const createComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -206,6 +210,7 @@ export const updateComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -244,6 +249,7 @@ export const deleteComment = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -283,6 +289,7 @@ export const createLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -321,6 +328,7 @@ export const updateLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -359,6 +367,7 @@ export const deleteLike = /* GraphQL */ `
           age
           location
           name
+          cognitoID
           createdAt
           updatedAt
         }
@@ -401,6 +410,7 @@ export const createUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }
@@ -427,6 +437,7 @@ export const updateUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }
@@ -453,6 +464,7 @@ export const deleteUser = /* GraphQL */ `
         nextToken
       }
       name
+      cognitoID
       createdAt
       updatedAt
     }

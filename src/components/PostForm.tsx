@@ -1,6 +1,7 @@
 import { Button, Input } from "antd";
 import { API, graphqlOperation } from "aws-amplify";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext, UserContext } from "../App";
 import { createPost } from "../graphql/mutations";
 
 const { TextArea } = Input;
@@ -8,15 +9,16 @@ const { TextArea } = Input;
 const PostForm = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const user = useContext(UserContext);
 
+  console.log(user);
   const addPost = async () => {
     const input = {
-      userPostId: "c4fd77aa-eb26-4632-95ec-67ef8c153e0c",
+      userPostId: user.id,
       postTitle: title,
       postBody: body,
       createdAt: new Date().toISOString(),
     };
-    console.log(input);
     await API.graphql(graphqlOperation(createPost, { input }));
   };
 

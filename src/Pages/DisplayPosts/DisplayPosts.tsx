@@ -1,41 +1,10 @@
-import { API, graphqlOperation } from "aws-amplify";
-import { useEffect, useState } from "react";
 import { Button, Pagination, PageHeader, Space, Skeleton, Divider } from "antd";
-import { onCreatePost } from "../../graphql/subscriptions";
-import { listPosts } from "../../graphql/queries";
 import PostForm from "../../components/PostForm";
-import _ from "lodash";
 import Post from "../../components/Post";
-import useListener from "../../hooks/useListener";
+import useDisplayPosts from "../../hooks/useDisplayPosts";
 
 const DisplayPosts = () => {
-  const [page, setPage] = useState(0);
-  const [posts, setPosts] = useState<any[]>([]);
-  const [showAdd, setShowAdd] = useState<boolean>(false);
-  useListener(onCreatePost, (postData: any) => {
-    const newPost = postData.value.data.onCreatePost;
-    setPosts((prevState) => {
-      const prevPosts = prevState.filter((post: any) => post.id !== newPost.id);
-      const updatedPosts = [newPost, ...prevPosts];
-      console.log(updatedPosts);
-      return updatedPosts;
-    });
-  });
-
-  useEffect(() => {
-    getPosts();
-  }, []);
-
-  const getPosts = async () => {
-    const result: any = await API.graphql(
-      graphqlOperation(listPosts, { limit: 10 })
-    );
-    setPosts(_.orderBy(result.data.listPosts.items, ["createdAt"], "desc"));
-  };
-
-  const onChange = (page: number, pageSize: number) => {
-    console.log(page);
-  };
+  const { page, posts, showAdd, setShowAdd, onChange } = useDisplayPosts();
 
   return (
     <>

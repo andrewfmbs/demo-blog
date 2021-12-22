@@ -79,7 +79,7 @@ export type ModelIDInput = {
 export type Post = {
   __typename: "Post",
   id: string,
-  postOwner?: User | null,
+  postOwner: User,
   postTitle: string,
   postBody: string,
   createdAt?: string | null,
@@ -96,6 +96,7 @@ export type User = {
   location: string,
   post?: ModelPostConnection | null,
   name: string,
+  cognitoID: string,
   createdAt: string,
   updatedAt: string,
 };
@@ -234,12 +235,14 @@ export type CreateUserInput = {
   age: number,
   location: string,
   name: string,
+  cognitoID: string,
 };
 
 export type ModelUserConditionInput = {
   age?: ModelIntInput | null,
   location?: ModelStringInput | null,
   name?: ModelStringInput | null,
+  cognitoID?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
@@ -250,10 +253,28 @@ export type UpdateUserInput = {
   age?: number | null,
   location?: string | null,
   name?: string | null,
+  cognitoID?: string | null,
 };
 
 export type DeleteUserInput = {
   id: string,
+};
+
+export type BondCard = {
+  __typename: "BondCard",
+  data?: BondCardData | null,
+};
+
+export type BondCardData = {
+  __typename: "BondCardData",
+  bondName: string,
+  previousClose: string,
+  currentPrice: string,
+  nineThirtyPrice?: string | null,
+  tenPrice?: string | null,
+  tenThirtyPrice?: string | null,
+  elevenPrice?: string | null,
+  elevenThirtyPrice?: string | null,
 };
 
 export type SearchablePostFilterInput = {
@@ -381,6 +402,70 @@ export type SearchableAggregateBucketResultItem = {
   doc_count: number,
 };
 
+export type SearchableUserFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  age?: SearchableIntFilterInput | null,
+  location?: SearchableStringFilterInput | null,
+  name?: SearchableStringFilterInput | null,
+  cognitoID?: SearchableStringFilterInput | null,
+  createdAt?: SearchableStringFilterInput | null,
+  updatedAt?: SearchableStringFilterInput | null,
+  and?: Array< SearchableUserFilterInput | null > | null,
+  or?: Array< SearchableUserFilterInput | null > | null,
+  not?: SearchableUserFilterInput | null,
+};
+
+export type SearchableIntFilterInput = {
+  ne?: number | null,
+  gt?: number | null,
+  lt?: number | null,
+  gte?: number | null,
+  lte?: number | null,
+  eq?: number | null,
+  range?: Array< number | null > | null,
+};
+
+export type SearchableUserSortInput = {
+  field?: SearchableUserSortableFields | null,
+  direction?: SearchableSortDirection | null,
+};
+
+export enum SearchableUserSortableFields {
+  id = "id",
+  age = "age",
+  location = "location",
+  name = "name",
+  cognitoID = "cognitoID",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchableUserAggregationInput = {
+  name: string,
+  type: SearchableAggregateType,
+  field: SearchableUserAggregateField,
+};
+
+export enum SearchableUserAggregateField {
+  id = "id",
+  age = "age",
+  location = "location",
+  name = "name",
+  cognitoID = "cognitoID",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchableUserConnection = {
+  __typename: "SearchableUserConnection",
+  items:  Array<User >,
+  nextToken?: string | null,
+  total?: number | null,
+  aggregateItems:  Array<SearchableAggregateResult >,
+};
+
 export type ModelPostFilterInput = {
   id?: ModelIDInput | null,
   postTitle?: ModelStringInput | null,
@@ -420,6 +505,7 @@ export type ModelUserFilterInput = {
   age?: ModelIntInput | null,
   location?: ModelStringInput | null,
   name?: ModelStringInput | null,
+  cognitoID?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
   or?: Array< ModelUserFilterInput | null > | null,
   not?: ModelUserFilterInput | null,
@@ -440,7 +526,7 @@ export type CreatePostMutation = {
   createPost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -450,9 +536,10 @@ export type CreatePostMutation = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -498,7 +585,7 @@ export type UpdatePostMutation = {
   updatePost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -508,9 +595,10 @@ export type UpdatePostMutation = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -556,7 +644,7 @@ export type DeletePostMutation = {
   deletePost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -566,9 +654,10 @@ export type DeletePostMutation = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -619,15 +708,16 @@ export type CreateCommentMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -663,15 +753,16 @@ export type UpdateCommentMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -707,15 +798,16 @@ export type DeleteCommentMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -752,15 +844,16 @@ export type CreateLikeMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -796,15 +889,16 @@ export type UpdateLikeMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -840,15 +934,16 @@ export type DeleteLikeMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -894,6 +989,7 @@ export type CreateUserMutation = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -924,6 +1020,7 @@ export type UpdateUserMutation = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -954,8 +1051,26 @@ export type DeleteUserMutation = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type TestHttpCallQuery = {
+  testHttpCall?:  {
+    __typename: "BondCard",
+    data?:  {
+      __typename: "BondCardData",
+      bondName: string,
+      previousClose: string,
+      currentPrice: string,
+      nineThirtyPrice?: string | null,
+      tenPrice?: string | null,
+      tenThirtyPrice?: string | null,
+      elevenPrice?: string | null,
+      elevenThirtyPrice?: string | null,
+    } | null,
   } | null,
 };
 
@@ -974,15 +1089,16 @@ export type SearchPostsQuery = {
     items:  Array< {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1018,15 +1134,19 @@ export type SearchPostsQuery = {
   } | null,
 };
 
-export type GetPostQueryVariables = {
-  id: string,
+export type SearchUsersQueryVariables = {
+  filter?: SearchableUserFilterInput | null,
+  sort?: Array< SearchableUserSortInput | null > | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  from?: number | null,
+  aggregates?: Array< SearchableUserAggregationInput | null > | null,
 };
 
-export type GetPostQuery = {
-  getPost?:  {
-    __typename: "Post",
-    id: string,
-    postOwner?:  {
+export type SearchUsersQuery = {
+  searchUsers?:  {
+    __typename: "SearchableUserConnection",
+    items:  Array< {
       __typename: "User",
       id: string,
       age: number,
@@ -1036,9 +1156,53 @@ export type GetPostQuery = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    } >,
+    nextToken?: string | null,
+    total?: number | null,
+    aggregateItems:  Array< {
+      __typename: "SearchableAggregateResult",
+      name: string,
+      result: ( {
+          __typename: "SearchableAggregateScalarResult",
+          value: number,
+        } | {
+          __typename: "SearchableAggregateBucketResult",
+          buckets?:  Array< {
+            __typename: string,
+            key: string,
+            doc_count: number,
+          } | null > | null,
+        }
+      ) | null,
+    } >,
+  } | null,
+};
+
+export type GetPostQueryVariables = {
+  id: string,
+};
+
+export type GetPostQuery = {
+  getPost?:  {
+    __typename: "Post",
+    id: string,
+    postOwner:  {
+      __typename: "User",
+      id: string,
+      age: number,
+      location: string,
+      post?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      name: string,
+      cognitoID: string,
+      createdAt: string,
+      updatedAt: string,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -1087,15 +1251,16 @@ export type ListPostsQuery = {
     items:  Array< {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1127,15 +1292,16 @@ export type GetCommentQuery = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1203,15 +1369,16 @@ export type GetLikeQuery = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1288,6 +1455,7 @@ export type GetUserQuery = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1312,6 +1480,7 @@ export type ListUsersQuery = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
     } >,
@@ -1332,15 +1501,16 @@ export type SubscribeToEventCommentsSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1370,7 +1540,7 @@ export type SubscribeToEventNewPostSubscription = {
   subscribeToEventNewPost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -1380,9 +1550,10 @@ export type SubscribeToEventNewPostSubscription = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -1427,7 +1598,7 @@ export type SubscribeToEventDeletePostSubscription = {
   subscribeToEventDeletePost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -1437,9 +1608,10 @@ export type SubscribeToEventDeletePostSubscription = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -1480,7 +1652,7 @@ export type OnCreatePostSubscription = {
   onCreatePost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -1490,9 +1662,10 @@ export type OnCreatePostSubscription = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -1533,7 +1706,7 @@ export type OnUpdatePostSubscription = {
   onUpdatePost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -1543,9 +1716,10 @@ export type OnUpdatePostSubscription = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -1586,7 +1760,7 @@ export type OnDeletePostSubscription = {
   onDeletePost?:  {
     __typename: "Post",
     id: string,
-    postOwner?:  {
+    postOwner:  {
       __typename: "User",
       id: string,
       age: number,
@@ -1596,9 +1770,10 @@ export type OnDeletePostSubscription = {
         nextToken?: string | null,
       } | null,
       name: string,
+      cognitoID: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     postTitle: string,
     postBody: string,
     createdAt?: string | null,
@@ -1644,15 +1819,16 @@ export type OnCreateCommentSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1683,15 +1859,16 @@ export type OnUpdateCommentSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1722,15 +1899,16 @@ export type OnDeleteCommentSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1762,15 +1940,16 @@ export type OnCreateLikeSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1801,15 +1980,16 @@ export type OnUpdateLikeSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1840,15 +2020,16 @@ export type OnDeleteLikeSubscription = {
     post?:  {
       __typename: "Post",
       id: string,
-      postOwner?:  {
+      postOwner:  {
         __typename: "User",
         id: string,
         age: number,
         location: string,
         name: string,
+        cognitoID: string,
         createdAt: string,
         updatedAt: string,
-      } | null,
+      },
       postTitle: string,
       postBody: string,
       createdAt?: string | null,
@@ -1889,6 +2070,7 @@ export type OnCreateUserSubscription = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1914,6 +2096,7 @@ export type OnUpdateUserSubscription = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1939,6 +2122,7 @@ export type OnDeleteUserSubscription = {
       nextToken?: string | null,
     } | null,
     name: string,
+    cognitoID: string,
     createdAt: string,
     updatedAt: string,
   } | null,

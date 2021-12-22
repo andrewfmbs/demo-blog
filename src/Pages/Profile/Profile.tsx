@@ -1,77 +1,16 @@
-import { Card, Col, Row, Space, Skeleton, Divider } from "antd";
-import Meta from "antd/lib/card/Meta";
+import { Col, Row, Space, Skeleton, Divider } from "antd";
 import Layout, { Content } from "antd/lib/layout/layout";
-import Sider from "antd/lib/layout/Sider";
 import Text from "antd/lib/typography/Text";
 import Title from "antd/lib/typography/Title";
-import { API, graphqlOperation } from "aws-amplify";
-import { useEffect } from "react";
-import { useState } from "react";
-import { Post as PostType } from "../../API";
+import { useContext } from "react";
+import { User as UserType } from "../../API";
+import { UserContext } from "../../App";
 import Post from "../../components/Post";
-import { getUser } from "../../graphql/queries";
-import {
-  onDeletePost,
-  subscribeToEventNewPost,
-} from "../../graphql/subscriptions";
-import useListener from "../../hooks/useListener";
+import useProfile from "../../hooks/useProfile";
 
-interface User {
-  name?: string;
-  age?: number;
-  location?: string;
-  post: {
-    items: PostType[];
-  };
-  id: string;
-}
-
-const Profile = () => {
-  const [userData, setUserData] = useState<User>({
-    name: "",
-    age: NaN,
-    location: "",
-    post: { items: [] },
-    id: "",
-  });
-
-  useListener(
-    subscribeToEventNewPost,
-    (postData: any) => {
-      setUserData((prevUserData: User) => {
-        const newUserData: User = { ...prevUserData };
-        newUserData.post.items.unshift(
-          postData.value.data.subscribeToEventNewPost
-        );
-        return newUserData;
-      });
-    },
-    { userPostId: (userData as User)?.id },
-    [userData?.id]
-  );
-
-  useListener(onDeletePost, (postData: any) => {
-    setUserData((prevUserData: User) => {
-      const newUserData: User = { ...prevUserData };
-      newUserData.post.items = postData;
-      return newUserData;
-    });
-  });
-
-  useEffect(() => {
-    getUserData();
-  }, []);
-
-  const getUserData = async () => {
-    // make call
-    const result: any = await API.graphql(
-      graphqlOperation(getUser, {
-        id: "c4fd77aa-eb26-4632-95ec-67ef8c153e0c",
-      })
-    );
-
-    setUserData(result.data.getUser);
-  };
+const Profile = ({ userData }: { userData: UserType }) => {
+  console.log(userData);
+  useProfile(userData?.id || "", userData?.post?.items || []);
 
   if (!userData.id) {
     return (
@@ -91,10 +30,10 @@ const Profile = () => {
         <Content>
           <Row>
             <Col>
-              <Title level={2}>{userData?.name}</Title>
+              <Title level={2}>{userData.name}</Title>
               <Space direction="vertical">
-                <Text>Age: {userData?.age}</Text>
-                <Text>Location: {userData?.location}</Text>
+                <Text>Age: {userData.age}</Text>
+                <Text>Location: {userData.location}</Text>
               </Space>
             </Col>
           </Row>
@@ -103,7 +42,7 @@ const Profile = () => {
           <Title level={3}>Posts</Title>
           <Row></Row>
           <Space direction="vertical" style={{ width: "100%" }}>
-            {userData?.post.items.map((post) => (
+            {userData.post?.items?.map((post) => (
               <div key={post.id}>
                 <Post post={post} />
               </div>
@@ -111,6 +50,11 @@ const Profile = () => {
           </Space>
         </div>
       </Space>
+      {/* <iframe
+        width="420"
+        height="345"
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      ></iframe> */}
     </Layout>
   );
 };
